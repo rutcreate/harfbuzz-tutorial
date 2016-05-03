@@ -1,7 +1,7 @@
 # README PLEASE #
 This repository is made for generate image from text because I have a problem with indic text rendering SO I use image instead!.
 
-I have no experience with C. All I know it's work! but codes are suck. If you have time and expierence with C and rewrite code to be readable, it would be very very appreciate.
+I have no experience with C. All I know it works! but codes are suck. If you have time and expierence with C and rewrite code to be readable, it would be very very appreciate.
 
 # Instruction #
 1. git clone https://github.com/rutcreate/harfbuzz-tutorial.git

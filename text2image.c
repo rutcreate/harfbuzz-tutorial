@@ -212,6 +212,7 @@ int main(int argc, char **argv)
     hb_glyph_position_t *pos_space = hb_buffer_get_glyph_positions (hb_buffer_space, NULL);
     double space_width = pos_space[0].x_advance / 64.;
 
+    int c = 0;
     token = strtok(input1, spaces);
     while (token != NULL)
     {
@@ -261,6 +262,7 @@ int main(int argc, char **argv)
         current_width += width;
       }
 
+      c++;
       token = strtok(NULL, spaces);
     }
 
@@ -305,7 +307,10 @@ int main(int argc, char **argv)
     double height = 2 * margin;
     for (unsigned int i = 0; i < len; i++)
     {
-      width  += pos[i].x_advance / 64.;
+      if (count > 0 || (count == 0 && i > 0))
+      {
+        width  += pos[i].x_advance / 64.;
+      }
       height -= pos[i].y_advance / 64.;
     }
     if (HB_DIRECTION_IS_HORIZONTAL (hb_buffer_get_direction(hb_buffer)))
@@ -355,6 +360,7 @@ int main(int argc, char **argv)
   cairo_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                 ceil(canvas_width),
                 ceil(canvas_height));
+
   cairo_t *cr;
   cr = cairo_create (cairo_surface);
   cairo_set_source_rgba (cr, 1., 1., 1., 0.);
@@ -411,7 +417,21 @@ int main(int argc, char **argv)
     for (unsigned int i = 0; i < len; i++)
     {
       cairo_glyphs[i].index = info[i].codepoint;
-      cairo_glyphs[i].x = current_x + pos[i].x_offset / 64.;
+      if (count == 0)
+      {
+        if (i == 0)
+        {
+          cairo_glyphs[i].x = (current_x + pos[i].x_offset / 64.) - 100000;
+        }
+        else
+        {
+          cairo_glyphs[i].x = (current_x + pos[i].x_offset / 64.) - (pos[0].x_advance / 64.);
+        }
+      }
+      else
+      {
+        cairo_glyphs[i].x = current_x + pos[i].x_offset / 64.;
+      }
       cairo_glyphs[i].y = -(current_y + pos[i].y_offset / 64.);
       current_x += pos[i].x_advance / 64.;
       current_y += pos[i].y_advance / 64.;
